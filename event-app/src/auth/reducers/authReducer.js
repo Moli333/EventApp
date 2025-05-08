@@ -1,23 +1,25 @@
+import { authTypes } from '../types/authTypes';
+
 export const authReducer = (state = {}, action = {}) => {
     switch (action.type) {
-        case 'authTypes.login':
+        case authTypes.login:
             return {
                 ...state,
                 logged: true,
                 user: action.payload,
                 errorMessage: null
             };
-        case 'autTypes.logout':
+        case authTypes.logout:
             return {
                 logged: false,
                 user: null,
                 errorMessage: null
             };
-        case 'authTypes.errors':
+        case authTypes.errors:
             return {
                 ...state,
                 logged: false,
-                errorMessage: action.payload
+                errorMessage: action.payload.errorMessage
             };
 
         default:

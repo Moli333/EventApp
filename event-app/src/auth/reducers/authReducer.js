@@ -12,7 +12,7 @@ export const authReducer = (state = {}, action = {}) => {
         case authTypes.logout:
             return {
                 logged: false,
-                user: null,
+                user: [],
                 errorMessage: null
             };
         case authTypes.errors:

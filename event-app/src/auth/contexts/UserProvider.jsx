@@ -1,23 +1,35 @@
-import { useReducer } from 'react';
+import { useReducer} from 'react';
 import { UserContext } from './UserContext';
 import { authReducer } from '../reducers/authReducer';
-
 import { useAuthenticate } from '../hooks/useAuthenticate';
 
 const authInitialState = {
-logged: false,
-user: null,
-errorMessage: null,
+    logged: false,
+    user: null,
+    errorMessage: null,
 };
 
-export const UserProvider = ({children }) => {
+const init = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
 
-    const [userState, dispatch] = useReducer(authReducer, authInitialState);
-    const {login, logout} = useAuthenticate(dispatch);
+    if (user) {
+        return {
+            logged: true,
+            errorMessage: null,
+            user
+        };
+    }
+    return authInitialState
+}
+
+export const UserProvider = ({ children }) => {
+
+    const [userState, dispatch] = useReducer(authReducer, authInitialState, init);
+    const { login, logout } = useAuthenticate(dispatch);
 
     return (
         <UserContext.Provider value={{ userState, login, logout }}>
-        {children}
+            {children}
         </UserContext.Provider>
     );
 };

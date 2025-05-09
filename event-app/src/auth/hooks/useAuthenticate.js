@@ -10,6 +10,7 @@ export const useAuthenticate = (dispatch) => {
             payload: { email, password },
         };
 
+        localStorage.setItem('user', JSON.stringify({ email, password }));
         dispatch(action);
     }
 

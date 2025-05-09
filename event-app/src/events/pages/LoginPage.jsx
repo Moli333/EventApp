@@ -1,5 +1,7 @@
-import { Box, Container, Typography, TextField, Button, Paper } from '@mui/material';
-import { useForm } from '../../hooks/useForm'; // Ajusta el path según tu estructura
+import { useContext } from 'react';
+import { useForm } from '../../hooks/useForm';
+import { UserContext } from '../../auth/contexts/UserContext'; // Ajusta el path según tu estructura
+import { useNavigate } from 'react-router-dom';
 
 const initialForm = {
     email: '',
@@ -7,56 +9,64 @@ const initialForm = {
 };
 
 export const LoginPage = () => {
-    const { email, password, onInputChange, resetForm } = useForm(initialForm);
+    const navigate = useNavigate();
+    const { login } = useContext(UserContext); // Asegúrate de importar el contexto correctamente
 
-    const onSubmit = (event) => {
-        event.preventDefault();
-        console.log('Datos del formulario:', { email, password });
-        // Aquí podrías llamar a un login, actualizar el contexto, etc.
-        resetForm();
+    const { email, password, onInputChange } = useForm(initialForm);
+
+    const onLoginUser = () => {
+        login({ email, password });
+
+        navigate('/', { replace: true });
     };
 
     return (
-        <Container maxWidth="sm">
-            <Typography variant="h4" align="center" gutterBottom>
-                Iniciar Sesión
-            </Typography>
+        <>
+            <div className="container vh-100 justify-content-center align-items-center">
+                <div className="row w-100">
+                    <div className="col-md-3"></div>
+                    <div className="col-md-6 mx-auto">
+                        <div className="card-body">
+                            <h4 className="card-title tex-center">Iniciar sesión</h4>
 
-            <Paper elevation={3} sx={{ p: 4, mt: 3 }}>
-                <Box
-                    component="form"
-                    onSubmit={onSubmit}
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                    }}
-                >
-                    <TextField
-                        label="Correo electrónico"
-                        name="email"
-                        type="email"
-                        variant="outlined"
-                        fullWidth
-                        value={email}
-                        onChange={onInputChange}
-                        required
-                    />
-                    <TextField
-                        label="Contraseña"
-                        name="password"
-                        type="password"
-                        variant="outlined"
-                        fullWidth
-                        value={password}
-                        onChange={onInputChange}
-                        required
-                    />
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
-                        Iniciar sesión
-                    </Button>
-                </Box>
-            </Paper>
-        </Container>
+                            <div className="form-group">
+                                <label> Correo electrónico </label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    id="email"
+                                    name="email"
+                                    value={email}
+                                    onChange={onInputChange}
+                                    placeholder='Escribe tu correo electrónico'
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label> Contraseña </label>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    id="password"
+                                    name="password"
+                                    value={password}
+                                    onChange={onInputChange}
+                                    placeholder='Escribe tu contraseña'
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <button
+                                    className="btn btn-primary btn-lg btn-block"
+                                    onClick={onLoginUser}
+                                >
+                                    Iniciar sesión
+                                </button>
+                            </div>
+                        </div>
+                    </div >
+                    <div className="col-md-3" ></div >
+                </div >
+            </div >
+        </>
     );
 };
